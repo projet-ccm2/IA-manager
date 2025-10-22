@@ -62,14 +62,18 @@ describe("Server Lifecycle", () => {
     };
 
     sigtermHandler();
-    expect(mockLogger.info).toHaveBeenCalledWith("SIGTERM received, shutting down gracefully");
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      "SIGTERM received, shutting down gracefully",
+    );
     expect(mockServer.close).toHaveBeenCalled();
     expect(process.exit).toHaveBeenCalledWith(0);
 
     jest.clearAllMocks();
 
     sigintHandler();
-    expect(mockLogger.info).toHaveBeenCalledWith("SIGINT received, shutting down gracefully");
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      "SIGINT received, shutting down gracefully",
+    );
     expect(mockServer.close).toHaveBeenCalled();
     expect(process.exit).toHaveBeenCalledWith(0);
   });
@@ -90,7 +94,7 @@ describe("Server Lifecycle", () => {
 
     const port = 3000;
     const environment = "development";
-    
+
     mockApp.listen(port, () => {
       mockLogger.info(`Server started on port ${port}`, {
         environment: environment,
@@ -99,9 +103,12 @@ describe("Server Lifecycle", () => {
     });
 
     expect(mockApp.listen).toHaveBeenCalledWith(port, expect.any(Function));
-    expect(mockLogger.info).toHaveBeenCalledWith(`Server started on port ${port}`, {
-      environment: environment,
-      port: port,
-    });
+    expect(mockLogger.info).toHaveBeenCalledWith(
+      `Server started on port ${port}`,
+      {
+        environment: environment,
+        port: port,
+      },
+    );
   });
 });

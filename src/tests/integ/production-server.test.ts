@@ -71,7 +71,7 @@ describe("Production Server", () => {
     require("../../index");
 
     const sigtermHandler = (process.on as jest.Mock).mock.calls.find(
-      call => call[0] === "SIGTERM"
+      (call) => call[0] === "SIGTERM",
     )?.[1];
 
     expect(sigtermHandler).toBeDefined();
@@ -86,7 +86,7 @@ describe("Production Server", () => {
     require("../../index");
 
     const sigintHandler = (process.on as jest.Mock).mock.calls.find(
-      call => call[0] === "SIGINT"
+      (call) => call[0] === "SIGINT",
     )?.[1];
 
     expect(sigintHandler).toBeDefined();
