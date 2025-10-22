@@ -24,7 +24,7 @@ jobs:
     with:
       docker-image-name: ai-manager-api-dev
       docker-tag: ${{ github.event.inputs.image-tag || format('dev-{0}', github.sha) }}
-      artifact-registry-repository: 'ai-manager-docker-dev'
+      artifact-registry-repository: "ai-manager-docker-dev"
       environment: development
       cloud-run-service-name: ai-manager-dev
     secrets:
