@@ -3,6 +3,7 @@ import type { AchievementAdviceResponse } from "../types/achievement";
 import { RateLimitError, TimeoutError } from "../errors/achievementAdvice";
 import { ACHIEVEMENT_ADVICE_SYSTEM_INSTRUCTION } from "../prompts/achievementAdvice";
 
+// TODO: adapt from model
 const ACHIEVEMENT_RESPONSE_SCHEMA = {
   type: "object",
   properties: {
