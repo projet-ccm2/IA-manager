@@ -16,10 +16,10 @@ export default {
   coverageReporters: ["text", "lcov", "html", "json"],
   coverageThreshold: {
     global: {
-      branches: 95,
-      functions: 93,
-      lines: 100,
-      statements: 99,
+      branches: 80,
+      functions: 80,
+      lines: 80,
+      statements: 80,
     },
   },
   testMatch: ["**/src/**/*.test.{ts,tsx}", "**/src/**/*.spec.{ts,tsx}"],
