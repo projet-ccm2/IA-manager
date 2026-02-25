@@ -1,9 +1,12 @@
+import "dotenv/config";
 import express from "express";
 import { config } from "./config/environment";
 import { logger } from "./utils/logger";
+import requestRouter from "./routes/request";
 
 const app = express();
 app.disable("x-powered-by");
+app.use(express.json());
 
 app.get("/health", (req, res) => {
   res.status(200).json({
@@ -11,6 +14,13 @@ app.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
     environment: config.nodeEnv,
   });
+});
+
+app.use("/request", requestRouter);
+
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  logger.error("Unhandled error", { error: err.message });
+  res.status(500).json({ error: "Internal server error" });
 });
 
 if (config.nodeEnv !== "test") {

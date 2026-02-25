@@ -1,0 +1,47 @@
+{
+  "info": {
+    "name": "IA-manager",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/health",
+          "host": ["{{base_url}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Advice For Achievement",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"channelName\": \"myStreamer\",\n  \"prompt\": \"suggest an achievement for first time chatters\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/request/adviceForAchievement",
+          "host": ["{{base_url}}"],
+          "path": ["request", "adviceForAchievement"]
+        }
+      }
+    }
+  ]
+}

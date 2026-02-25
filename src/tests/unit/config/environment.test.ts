@@ -15,11 +15,14 @@ describe("Environment Configuration", () => {
       delete process.env.PORT;
       delete process.env.NODE_ENV;
       delete process.env.ALLOWED_ORIGINS;
+      delete process.env.GEMINI_API_KEY;
 
       const { config } = require("../../../config/environment");
 
       expect(config.port).toBe(3000);
       expect(config.nodeEnv).toBe("development");
+      expect(config.geminiApiKey).toBe("");
+      expect(config.geminiModel).toBe("gemini-2.0-flash");
       expect(config.cors.allowedOrigins).toEqual([
         "http://localhost:3000",
         "http://localhost:8080",
@@ -78,12 +81,15 @@ describe("Environment Configuration", () => {
 
       expect(config).toHaveProperty("port");
       expect(config).toHaveProperty("nodeEnv");
+      expect(config).toHaveProperty("geminiApiKey");
+      expect(config).toHaveProperty("geminiModel");
       expect(config).toHaveProperty("cors");
 
       expect(config.cors).toHaveProperty("allowedOrigins");
 
       expect(typeof config.port).toBe("number");
       expect(typeof config.nodeEnv).toBe("string");
+      expect(typeof config.geminiApiKey).toBe("string");
       expect(Array.isArray(config.cors.allowedOrigins)).toBe(true);
     });
   });
