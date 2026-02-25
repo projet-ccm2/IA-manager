@@ -18,10 +18,17 @@ app.get("/health", (req, res) => {
 
 app.use("/request", requestRouter);
 
-app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  logger.error("Unhandled error", { error: err.message });
-  res.status(500).json({ error: "Internal server error" });
-});
+app.use(
+  (
+    err: Error,
+    _req: express.Request,
+    res: express.Response,
+    _next: express.NextFunction,
+  ) => {
+    logger.error("Unhandled error", { error: err.message });
+    res.status(500).json({ error: "Internal server error" });
+  },
+);
 
 if (config.nodeEnv !== "test") {
   const server = app.listen(config.port, () => {

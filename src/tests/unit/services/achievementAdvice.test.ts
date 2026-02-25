@@ -1,5 +1,8 @@
 import { getAchievementAdvice } from "../../../services/achievementAdvice";
-import { RateLimitError, TimeoutError } from "../../../errors/achievementAdvice";
+import {
+  RateLimitError,
+  TimeoutError,
+} from "../../../errors/achievementAdvice";
 
 const mockGenerateContent = jest.fn();
 
@@ -32,7 +35,7 @@ describe("getAchievementAdvice", () => {
       "test-api-key",
       "gemini-2.0-flash",
       "testChannel",
-      "suggest a simple achievement"
+      "suggest a simple achievement",
     );
 
     expect(result).toEqual(achievement);
@@ -53,7 +56,7 @@ describe("getAchievementAdvice", () => {
           responseMimeType: "application/json",
           responseJsonSchema: expect.any(Object),
         }),
-      })
+      }),
     );
   });
 
@@ -63,7 +66,7 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue(err);
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
     ).rejects.toThrow(RateLimitError);
   }, 10000);
 
@@ -73,7 +76,7 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue(err);
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
     ).rejects.toThrow(TimeoutError);
   });
 
@@ -81,7 +84,7 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: "null" });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
     ).rejects.toThrow("Invalid response format");
   });
 
@@ -89,7 +92,7 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: undefined });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
     ).rejects.toThrow("Empty response from Gemini");
   });
 
@@ -97,7 +100,7 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: "not valid json {" });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
     ).rejects.toThrow();
   });
 
@@ -107,7 +110,7 @@ describe("getAchievementAdvice", () => {
     });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
     ).rejects.toThrow("Invalid response format");
   });
 
@@ -115,7 +118,7 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue(new RateLimitError());
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
     ).rejects.toThrow(RateLimitError);
   });
 
@@ -123,15 +126,15 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue(new TimeoutError());
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
     ).rejects.toThrow(TimeoutError);
   });
 
   it("rethrows non-Error exceptions", async () => {
     mockGenerateContent.mockRejectedValue("string error");
 
-    await expect(getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt")).rejects.toBe(
-      "string error"
-    );
+    await expect(
+      getAchievementAdvice("key", "gemini-2.0-flash", "channel", "prompt"),
+    ).rejects.toBe("string error");
   });
 });

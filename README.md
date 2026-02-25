@@ -107,11 +107,11 @@ Generate a Twitch viewer achievement suggestion from a channel name and user pro
 
 **Error responses**
 
-| Status | Error              | When                                      |
-| ------ | ------------------ | ----------------------------------------- |
-| 400    | Validation error   | Missing or invalid channelName or prompt  |
-| 429    | Too many requests  | Gemini rate limit (free tier)             |
-| 500    | Internal server error | Malformed request or unexpected error  |
-| 502    | Bad gateway        | Invalid response from AI                  |
-| 503    | Service unavailable| AI service down or not configured        |
-| 504    | Gateway timeout    | AI request timed out                     |
+| Status | Error                 | When                                     |
+| ------ | --------------------- | ---------------------------------------- |
+| 400    | Validation error      | Missing or invalid channelName or prompt |
+| 429    | Too many requests     | Gemini rate limit (free tier)            |
+| 500    | Internal server error | Malformed request or unexpected error    |
+| 502    | Bad gateway           | Invalid response from AI                 |
+| 503    | Service unavailable   | AI service down or not configured        |
+| 504    | Gateway timeout       | AI request timed out                     |

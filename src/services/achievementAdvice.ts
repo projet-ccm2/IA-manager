@@ -21,20 +21,44 @@ const MAX_RETRIES = 2;
 const RETRY_DELAY_MS = 3000;
 
 function isRateLimitError(err: unknown): boolean {
-  const status = (err as { status?: number }).status ?? (err as { statusCode?: number }).statusCode;
+  const status =
+    (err as { status?: number }).status ??
+    (err as { statusCode?: number }).statusCode;
   if (status === 429) return true;
   const msg = (err as Error)?.message?.toLowerCase() ?? "";
-  return msg.includes("429") || msg.includes("rate limit") || msg.includes("resource exhausted");
+  return (
+    msg.includes("429") ||
+    msg.includes("rate limit") ||
+    msg.includes("resource exhausted")
+  );
+}
+
+function parseResponse(text: string | undefined): AchievementAdviceResponse {
+  if (!text) throw new Error("Empty response from Gemini");
+  const parsed = JSON.parse(text) as unknown;
+  if (!isValidAchievement(parsed)) throw new Error("Invalid response format");
+  return parsed;
+}
+
+function shouldRetry(err: unknown, attempt: number): boolean {
+  return isRateLimitError(err) && attempt < MAX_RETRIES;
+}
+
+function rethrowOrMapError(err: unknown): never {
+  if (err instanceof Error && err.name === "AbortError")
+    throw new TimeoutError();
+  if (err instanceof RateLimitError || err instanceof TimeoutError) throw err;
+  if (isRateLimitError(err)) throw new RateLimitError();
+  throw err;
 }
 
 export async function getAchievementAdvice(
   apiKey: string,
   model: string,
   channelName: string,
-  prompt: string
+  prompt: string,
 ): Promise<AchievementAdviceResponse> {
   const ai = new GoogleGenAI({ apiKey });
-  let lastError: unknown;
 
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     const controller = new AbortController();
@@ -44,59 +68,36 @@ export async function getAchievementAdvice(
       const response = await ai.models.generateContent({
         model,
         contents: [
-        {
-          role: "user",
-          parts: [{ text: `Channel: ${channelName}\n\nUser request: ${prompt}` }],
+          {
+            role: "user",
+            parts: [
+              { text: `Channel: ${channelName}\n\nUser request: ${prompt}` },
+            ],
+          },
+        ],
+        config: {
+          systemInstruction: ACHIEVEMENT_ADVICE_SYSTEM_INSTRUCTION,
+          responseMimeType: "application/json",
+          responseJsonSchema: ACHIEVEMENT_RESPONSE_SCHEMA,
+          abortSignal: controller.signal,
         },
-      ],
-      config: {
-        systemInstruction: ACHIEVEMENT_ADVICE_SYSTEM_INSTRUCTION,
-        responseMimeType: "application/json",
-        responseJsonSchema: ACHIEVEMENT_RESPONSE_SCHEMA,
-        abortSignal: controller.signal,
-      },
-    });
-
-    clearTimeout(timeoutId);
-
-    const text = response.text;
-    if (!text) {
-      throw new Error("Empty response from Gemini");
-    }
-
-    const parsed = JSON.parse(text) as unknown;
-    if (!isValidAchievement(parsed)) {
-      throw new Error("Invalid response format");
-    }
-
-    return parsed;
+      });
+      clearTimeout(timeoutId);
+      return parseResponse(response.text);
     } catch (err) {
       clearTimeout(timeoutId);
-      lastError = err;
-
-      if (err instanceof Error && err.name === "AbortError") {
-        throw new TimeoutError();
-      }
-      if (err instanceof RateLimitError || err instanceof TimeoutError) {
-        throw err;
-      }
-      if (isRateLimitError(err) && attempt < MAX_RETRIES) {
+      if (shouldRetry(err, attempt)) {
         await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
         continue;
       }
-      if (isRateLimitError(err)) {
-        throw new RateLimitError();
-      }
-      throw err;
+      rethrowOrMapError(err);
     }
   }
 
-  throw lastError;
+  throw new RateLimitError();
 }
 
-function isValidAchievement(
-  obj: unknown
-): obj is AchievementAdviceResponse {
+function isValidAchievement(obj: unknown): obj is AchievementAdviceResponse {
   if (!obj || typeof obj !== "object") return false;
   const o = obj as Record<string, unknown>;
   return (

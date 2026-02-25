@@ -115,7 +115,7 @@ describe("POST /request/adviceForAchievement", () => {
       config.geminiApiKey,
       config.geminiModel,
       "myChannel",
-      "first chat achievement"
+      "first chat achievement",
     );
   });
 
