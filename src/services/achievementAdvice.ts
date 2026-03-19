@@ -97,7 +97,7 @@ function isValidSuggestion(obj: unknown): obj is AchievementSuggestionResponse {
   if (!o.type || typeof o.type !== "object") return false;
   const t = o.type as Record<string, unknown>;
   if (!isSupportedTriggerLabel(t.label)) return false;
-  const label = t.label as TriggerLabel;
+  const label = t.label;
 
   if (!("data" in t)) return false;
   if (!isValidTriggerTypeData(label, t.data)) return false;
