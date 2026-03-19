@@ -2,7 +2,7 @@ import "dotenv/config";
 import express from "express";
 import { config } from "./config/environment";
 import { logger } from "./utils/logger";
-import requestRouter from "./routes/request";
+import achievementsRouter from "./routes/achievements";
 
 const app = express();
 app.disable("x-powered-by");
@@ -16,7 +16,7 @@ app.get("/health", (req, res) => {
   });
 });
 
-app.use("/request", requestRouter);
+app.use("/achievements", achievementsRouter);
 
 app.use(
   (

@@ -16,6 +16,7 @@ describe("Environment Configuration", () => {
       delete process.env.NODE_ENV;
       delete process.env.ALLOWED_ORIGINS;
       delete process.env.GEMINI_API_KEY;
+      delete process.env.GEMINI_MODEL;
 
       const { config } = require("../../../config/environment");
 

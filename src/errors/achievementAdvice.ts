@@ -11,3 +11,10 @@ export class TimeoutError extends Error {
     this.name = "TimeoutError";
   }
 }
+
+export class InvalidOutputError extends Error {
+  constructor(message = "AI output invalid") {
+    super(message);
+    this.name = "InvalidOutputError";
+  }
+}

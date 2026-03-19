@@ -13,7 +13,7 @@ function validateConfig(): Config {
     port: Number.parseInt(process.env.PORT || "3000", 10),
     nodeEnv: process.env.NODE_ENV || "development",
     geminiApiKey: process.env.GEMINI_API_KEY || "",
-    geminiModel: process.env.GEMINI_MODEL || "gemini-2.5-flash-lite",
+    geminiModel: process.env.GEMINI_MODEL || "gemini-2.0-flash",
     cors: {
       allowedOrigins: process.env.ALLOWED_ORIGINS
         ? process.env.ALLOWED_ORIGINS.split(",")
