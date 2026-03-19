@@ -13,6 +13,9 @@ jest.mock("../../config/environment", () => ({
   config: {
     nodeEnv: "production",
     port: 3000,
+    geminiApiKey: "test-key",
+    geminiModel: "gemini-2.0-flash",
+    cors: { allowedOrigins: [] },
   },
 }));
 
@@ -38,6 +41,7 @@ describe("Production Server", () => {
       }),
     };
 
+    const mockRouter = { post: jest.fn(), use: jest.fn() };
     mockApp = {
       listen: jest.fn((port, callback) => {
         if (callback) callback();
@@ -45,9 +49,12 @@ describe("Production Server", () => {
       }),
       get: jest.fn(),
       disable: jest.fn(),
+      use: jest.fn(),
     };
-
-    jest.doMock("express", () => jest.fn(() => mockApp));
+    const expressFn = jest.fn(() => mockApp);
+    (expressFn as any).Router = () => mockRouter;
+    (expressFn as any).json = jest.fn();
+    jest.doMock("express", () => expressFn);
 
     jest.clearAllMocks();
   });

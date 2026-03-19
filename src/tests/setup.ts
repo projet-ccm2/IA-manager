@@ -12,3 +12,4 @@ global.console = {
 
 process.env.PORT = "3000";
 process.env.NODE_ENV = "test";
+process.env.GEMINI_API_KEY = "test-key";
