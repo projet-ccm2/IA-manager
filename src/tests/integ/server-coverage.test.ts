@@ -63,8 +63,9 @@ describe("Server Coverage Tests", () => {
       config: {
         nodeEnv: "development",
         port: 3000,
-        geminiApiKey: "test-key",
-        geminiModel: "gemini-2.0-flash",
+        gcpProjectId: "test-project",
+        gcpLocation: "europe-west1",
+        geminiModel: "gemini-2.0-flash-lite",
         cors: { allowedOrigins: [] },
       },
     }));

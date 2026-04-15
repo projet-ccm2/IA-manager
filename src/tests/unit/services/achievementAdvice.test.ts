@@ -36,7 +36,8 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
 
     const result = await getAchievementAdvice(
-      "test-api-key",
+      "test-project",
+      "europe-west1",
       "gemini-2.0-flash",
       "suggest an achievement",
       undefined,
@@ -58,7 +59,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: "not valid json {" });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).rejects.toThrow(InvalidOutputError);
   });
 
@@ -68,7 +75,13 @@ describe("getAchievementAdvice", () => {
     });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).rejects.toThrow(InvalidOutputError);
   });
 
@@ -87,7 +100,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).resolves.toEqual(suggestion);
   });
 
@@ -106,7 +125,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).resolves.toEqual(suggestion);
   });
 
@@ -125,7 +150,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).rejects.toThrow(InvalidOutputError);
   });
 
@@ -145,9 +176,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", [
-        "countMessage",
-      ]),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        ["countMessage"],
+      ),
     ).rejects.toThrow(InvalidOutputError);
   });
 
@@ -157,7 +192,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue(err);
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).rejects.toThrow(RateLimitError);
   }, 10000);
 
@@ -167,7 +208,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue(err);
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).rejects.toThrow(TimeoutError);
   });
 
@@ -175,7 +222,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue(new RateLimitError());
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).rejects.toThrow(RateLimitError);
   });
 
@@ -183,7 +236,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue(new TimeoutError());
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).rejects.toThrow(TimeoutError);
   });
 
@@ -191,7 +250,13 @@ describe("getAchievementAdvice", () => {
     mockGenerateContent.mockRejectedValue("string error");
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", undefined),
+      getAchievementAdvice(
+        "test-project",
+        "europe-west1",
+        "gemini-2.0-flash",
+        "prompt",
+        undefined,
+      ),
     ).rejects.toBe("string error");
   });
 });
