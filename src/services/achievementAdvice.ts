@@ -143,12 +143,13 @@ function mapOrThrow(err: unknown): never {
 }
 
 export async function getAchievementAdvice(
-  apiKey: string,
+  project: string,
+  location: string,
   model: string,
   prompt: string,
   supportedTriggerLabels?: TriggerLabel[],
 ): Promise<AchievementSuggestionResponse> {
-  const ai = new GoogleGenAI({ apiKey });
+  const ai = new GoogleGenAI({ vertexai: true, project, location });
   const supported = supportedTriggerLabels?.length
     ? supportedTriggerLabels
     : [...SUPPORTED_TRIGGER_LABELS];

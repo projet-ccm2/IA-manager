@@ -15,15 +15,17 @@ describe("Environment Configuration", () => {
       delete process.env.PORT;
       delete process.env.NODE_ENV;
       delete process.env.ALLOWED_ORIGINS;
-      delete process.env.GEMINI_API_KEY;
+      delete process.env.GCP_PROJECT_ID;
+      delete process.env.GCP_LOCATION;
       delete process.env.GEMINI_MODEL;
 
       const { config } = require("../../../config/environment");
 
       expect(config.port).toBe(3000);
       expect(config.nodeEnv).toBe("development");
-      expect(config.geminiApiKey).toBe("");
-      expect(config.geminiModel).toBe("gemini-2.0-flash");
+      expect(config.gcpProjectId).toBe("");
+      expect(config.gcpLocation).toBe("europe-west1");
+      expect(config.geminiModel).toBe("gemini-2.0-flash-lite");
       expect(config.cors.allowedOrigins).toEqual([
         "http://localhost:3000",
         "http://localhost:8080",
@@ -82,7 +84,8 @@ describe("Environment Configuration", () => {
 
       expect(config).toHaveProperty("port");
       expect(config).toHaveProperty("nodeEnv");
-      expect(config).toHaveProperty("geminiApiKey");
+      expect(config).toHaveProperty("gcpProjectId");
+      expect(config).toHaveProperty("gcpLocation");
       expect(config).toHaveProperty("geminiModel");
       expect(config).toHaveProperty("cors");
 
@@ -90,7 +93,8 @@ describe("Environment Configuration", () => {
 
       expect(typeof config.port).toBe("number");
       expect(typeof config.nodeEnv).toBe("string");
-      expect(typeof config.geminiApiKey).toBe("string");
+      expect(typeof config.gcpProjectId).toBe("string");
+      expect(typeof config.gcpLocation).toBe("string");
       expect(Array.isArray(config.cors.allowedOrigins)).toBe(true);
     });
   });
