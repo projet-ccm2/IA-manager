@@ -91,7 +91,8 @@ describe("POST /achievements/suggestions", () => {
     expect(response.status).toBe(200);
     expect(response.body).toEqual(validSuggestion);
     expect(mockGetAchievementAdvice).toHaveBeenCalledWith(
-      config.geminiApiKey,
+      config.gcpProjectId,
+      config.gcpLocation,
       config.geminiModel,
       "first chat achievement",
       undefined,
@@ -147,14 +148,15 @@ describe("POST /achievements/suggestions", () => {
     expect(response.body).toMatchObject({ error: "Service unavailable" });
   });
 
-  it("returns 503 when GEMINI_API_KEY is not set", async () => {
+  it("returns 503 when GCP_PROJECT_ID is not set", async () => {
     jest.resetModules();
     jest.doMock("../../config/environment", () => ({
       config: {
         port: 3000,
         nodeEnv: "test",
-        geminiApiKey: "",
-        geminiModel: "gemini-2.0-flash",
+        gcpProjectId: "",
+        gcpLocation: "europe-west1",
+        geminiModel: "gemini-2.0-flash-lite",
         cors: { allowedOrigins: [] },
       },
     }));

@@ -1,7 +1,8 @@
 interface Config {
   port: number;
   nodeEnv: string;
-  geminiApiKey: string;
+  gcpProjectId: string;
+  gcpLocation: string;
   geminiModel: string;
   cors: {
     allowedOrigins: string[];

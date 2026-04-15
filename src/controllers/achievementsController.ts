@@ -65,7 +65,7 @@ export async function createSuggestion(req: Request, res: Response) {
     supportedTriggerLabels = supportedRaw as TriggerLabel[];
   }
 
-  if (!config.geminiApiKey) {
+  if (!config.gcpProjectId) {
     sendError(res, 503, "Service unavailable", "AI service is not configured");
     return;
   }
@@ -78,7 +78,8 @@ export async function createSuggestion(req: Request, res: Response) {
     });
 
     const suggestion = await getAchievementAdvice(
-      config.geminiApiKey,
+      config.gcpProjectId,
+      config.gcpLocation,
       config.geminiModel,
       prompt.trim(),
       supportedTriggerLabels,
@@ -114,7 +115,7 @@ export async function createSuggestion(req: Request, res: Response) {
         res,
         429,
         "Too many requests",
-        "Gemini API rate limit exceeded. Wait a few minutes or check your quota at aistudio.google.com",
+        "Vertex AI rate limit exceeded. Wait a few minutes or check your quota in Google Cloud Console",
       );
       return;
     }
