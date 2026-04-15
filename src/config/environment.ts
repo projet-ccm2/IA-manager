@@ -15,7 +15,7 @@ function validateConfig(): Config {
     nodeEnv: process.env.NODE_ENV || "development",
     gcpProjectId: process.env.GCP_PROJECT_ID || "",
     gcpLocation: process.env.GCP_LOCATION || "europe-west1",
-    geminiModel: process.env.GEMINI_MODEL || "gemini-2.0-flash",
+    geminiModel: process.env.GEMINI_MODEL || "gemini-2.0-flash-001",
     cors: {
       allowedOrigins: process.env.ALLOWED_ORIGINS
         ? process.env.ALLOWED_ORIGINS.split(",")
