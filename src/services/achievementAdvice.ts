@@ -190,7 +190,6 @@ export async function getAchievementAdvice(
       return suggestion;
     } catch (err) {
       clearTimeout(timeoutId);
-      console.error("Gemini raw error:", JSON.stringify(err, Object.getOwnPropertyNames(err as object)));
       if (shouldRetry(err, attempt)) {
         await new Promise((r) => setTimeout(r, RETRY_DELAY_MS));
         continue;
