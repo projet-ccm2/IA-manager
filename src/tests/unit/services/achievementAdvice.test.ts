@@ -30,7 +30,7 @@ describe("getAchievementAdvice", () => {
       secret: false,
       public: false,
       active: true,
-      type: { label: "message", data: null },
+      type: { label: "countMessage", data: null },
     };
 
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
@@ -81,7 +81,7 @@ describe("getAchievementAdvice", () => {
       secret: false,
       public: false,
       active: true,
-      type: { label: "channel_point_cost", data: 25 },
+      type: { label: "countCostChannelPoint", data: 25 },
     };
 
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
@@ -100,7 +100,7 @@ describe("getAchievementAdvice", () => {
       secret: false,
       public: false,
       active: true,
-      type: { label: "channel_point_cost", data: "25" },
+      type: { label: "countCostChannelPoint", data: "25" },
     };
 
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
@@ -119,7 +119,7 @@ describe("getAchievementAdvice", () => {
       secret: false,
       public: false,
       active: true,
-      type: { label: "channel_point_cost", data: "0" },
+      type: { label: "countCostChannelPoint", data: "0" },
     };
 
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
@@ -139,13 +139,15 @@ describe("getAchievementAdvice", () => {
       secret: false,
       public: false,
       active: true,
-      type: { label: "message_content", data: "hello" },
+      type: { label: "contentMessage", data: "hello" },
     };
 
     mockGenerateContent.mockResolvedValue({ text: JSON.stringify(suggestion) });
 
     await expect(
-      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", ["message"]),
+      getAchievementAdvice("key", "gemini-2.0-flash", "prompt", [
+        "countMessage",
+      ]),
     ).rejects.toThrow(InvalidOutputError);
   });
 
