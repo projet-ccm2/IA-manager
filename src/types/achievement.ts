@@ -1,9 +1,9 @@
 export const SUPPORTED_TRIGGER_LABELS = [
-  "message",
-  "message_content",
-  "channel_point_cost",
-  "redeem_channel_point",
-  "api_caller",
+  "countMessage",
+  "contentMessage",
+  "countCostChannelPoint",
+  "countRedeemChannelPoint",
+  "apicaller",
 ] as const;
 
 export type TriggerLabel = (typeof SUPPORTED_TRIGGER_LABELS)[number];

@@ -67,11 +67,11 @@ function isRateLimitError(err: unknown): boolean {
 }
 
 function isValidTriggerTypeData(label: TriggerLabel, data: unknown): boolean {
-  if (label === "message") return data === null;
-  if (label === "message_content") return isNonEmptyString(data);
-  if (label === "redeem_channel_point") return isNonEmptyString(data);
-  if (label === "api_caller") return isNonEmptyString(data);
-  if (label === "channel_point_cost") {
+  if (label === "countMessage") return data === null;
+  if (label === "contentMessage") return isNonEmptyString(data);
+  if (label === "countRedeemChannelPoint") return isNonEmptyString(data);
+  if (label === "apicaller") return isNonEmptyString(data);
+  if (label === "countCostChannelPoint") {
     if (typeof data === "number") return Number.isFinite(data) && data > 0;
     if (typeof data === "string") {
       const v = Number.parseFloat(data);

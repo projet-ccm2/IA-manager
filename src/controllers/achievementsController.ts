@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { getAchievementAdvice } from "../services/achievementAdvice";
 import { config } from "../config/environment";
+import { logger } from "../utils/logger";
 import {
   InvalidOutputError,
   RateLimitError,
@@ -18,10 +19,16 @@ function sendError(
   error: string,
   message: string,
 ) {
+  logger.warn("Request error", { status, error, message });
   res.status(status).json({ error, message });
 }
 
 export async function createSuggestion(req: Request, res: Response) {
+  logger.debug("Incoming suggestion request", {
+    body: req.body,
+    contentType: req.headers["content-type"],
+  });
+
   const body = req.body as unknown;
   const input = body as {
     prompt?: unknown;
@@ -64,15 +71,35 @@ export async function createSuggestion(req: Request, res: Response) {
   }
 
   try {
+    logger.debug("Calling AI service", {
+      model: config.geminiModel,
+      promptLength: prompt.trim().length,
+      supportedTriggerLabels,
+    });
+
     const suggestion = await getAchievementAdvice(
       config.geminiApiKey,
       config.geminiModel,
       prompt.trim(),
       supportedTriggerLabels,
     );
+
+    logger.info("Suggestion generated successfully", {
+      title: suggestion.title,
+      triggerLabel: suggestion.type.label,
+    });
+
     res.status(200).json(suggestion);
   } catch (err) {
+    const errorContext = {
+      errorName: err instanceof Error ? err.name : "Unknown",
+      errorMessage: err instanceof Error ? err.message : String(err),
+      prompt: prompt.trim(),
+      supportedTriggerLabels,
+    };
+
     if (err instanceof InvalidOutputError) {
+      logger.error("AI returned invalid output", errorContext);
       sendError(
         res,
         422,
@@ -82,6 +109,7 @@ export async function createSuggestion(req: Request, res: Response) {
       return;
     }
     if (err instanceof RateLimitError) {
+      logger.error("Gemini rate limit hit", errorContext);
       sendError(
         res,
         429,
@@ -91,6 +119,7 @@ export async function createSuggestion(req: Request, res: Response) {
       return;
     }
     if (err instanceof TimeoutError) {
+      logger.error("AI request timed out", errorContext);
       sendError(
         res,
         504,
@@ -99,6 +128,11 @@ export async function createSuggestion(req: Request, res: Response) {
       );
       return;
     }
+
+    logger.error("Unexpected error in suggestion generation", {
+      ...errorContext,
+      stack: err instanceof Error ? err.stack : undefined,
+    });
 
     sendError(
       res,

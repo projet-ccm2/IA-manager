@@ -16,13 +16,13 @@ Hard requirements for the JSON response:
   "public": boolean,
   "active": boolean,
   "type": {
-    "label": one of: "message" | "message_content" | "channel_point_cost" | "redeem_channel_point" | "api_caller",
+    "label": one of: "countMessage" | "contentMessage" | "countCostChannelPoint" | "countRedeemChannelPoint" | "apicaller",
     "data": depends on "label":
-      "message" => null,
-      "message_content" => non-empty string,
-      "channel_point_cost" => positive number (or positive numeric string),
-      "redeem_channel_point" => non-empty string,
-      "api_caller" => non-empty string
+      "countMessage" => null,
+      "contentMessage" => non-empty string,
+      "countCostChannelPoint" => positive number (or positive numeric string),
+      "countRedeemChannelPoint" => non-empty string,
+      "apicaller" => non-empty string
   }
 }
 

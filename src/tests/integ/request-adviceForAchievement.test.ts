@@ -27,7 +27,7 @@ describe("POST /achievements/suggestions", () => {
     secret: false,
     public: false,
     active: true,
-    type: { label: "message", data: null },
+    type: { label: "countMessage", data: null },
   };
 
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe("POST /achievements/suggestions", () => {
   it("returns 400 when prompt is missing", async () => {
     const response = await request(app)
       .post("/achievements/suggestions")
-      .send({ supportedTriggerLabels: ["message"] });
+      .send({ supportedTriggerLabels: ["countMessage"] });
 
     expect(response.status).toBe(400);
     expect(response.body).toMatchObject({
