@@ -24,8 +24,8 @@ describe("Environment Configuration", () => {
       expect(config.port).toBe(3000);
       expect(config.nodeEnv).toBe("development");
       expect(config.gcpProjectId).toBe("");
-      expect(config.gcpLocation).toBe("europe-west1");
-      expect(config.geminiModel).toBe("gemini-2.0-flash-lite");
+      expect(config.gcpLocation).toBe("global");
+      expect(config.geminiModel).toBe("gemini-2.5-flash");
       expect(config.cors.allowedOrigins).toEqual([
         "http://localhost:3000",
         "http://localhost:8080",
@@ -37,15 +37,37 @@ describe("Environment Configuration", () => {
       process.env.PORT = "8080";
       process.env.NODE_ENV = "production";
       process.env.ALLOWED_ORIGINS = "https://example.com,https://test.com";
+      process.env.GEMINI_MODEL = "gemini-2.0-flash-lite";
 
       const { config } = require("../../../config/environment");
 
       expect(config.port).toBe(8080);
       expect(config.nodeEnv).toBe("production");
+      expect(config.geminiModel).toBe("gemini-2.5-flash");
       expect(config.cors.allowedOrigins).toEqual([
         "https://example.com",
         "https://test.com",
       ]);
+    });
+
+    it("should keep supported gemini models unchanged", () => {
+      process.env.GEMINI_MODEL = "gemini-2.5-flash-lite";
+
+      const { config } = require("../../../config/environment");
+
+      expect(config.geminiModel).toBe("gemini-2.5-flash-lite");
+    });
+
+    it("should read google cloud aliases for project and location", () => {
+      delete process.env.GCP_PROJECT_ID;
+      delete process.env.GCP_LOCATION;
+      process.env.GOOGLE_CLOUD_PROJECT = "google-project";
+      process.env.GOOGLE_CLOUD_LOCATION = "europe-west1";
+
+      const { config } = require("../../../config/environment");
+
+      expect(config.gcpProjectId).toBe("google-project");
+      expect(config.gcpLocation).toBe("europe-west1");
     });
 
     it("should parse port as integer", () => {

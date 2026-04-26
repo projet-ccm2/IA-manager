@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx src/index.ts",
+    "smoke:ai": "tsx src/scripts/smokeGemini.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "prettier": "npx prettier . --write",
