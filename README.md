@@ -13,15 +13,30 @@ Service for Twitch viewer achievements with AI-generated suggestions via Google 
 npm install
 ```
 
-Set the environment variable:
+Set the Google Cloud environment variables:
 
 ```
-GEMINI_API_KEY=your-api-key
+GCP_PROJECT_ID=your-gcp-project-id
+GCP_LOCATION=global
+GEMINI_MODEL=gemini-2.5-flash
 ```
 
-Get an API key from [Google AI Studio](https://aistudio.google.com/apikey).
+This service uses Vertex AI through the Google Gen AI SDK. Make sure the Vertex AI API is enabled in your Google Cloud project and the runtime has credentials for that project.
 
-On the free tier, the API may return 429 (Too many requests) when rate limits are exceeded.
+For local development, the most reliable check is to use Application Default Credentials:
+
+```bash
+gcloud auth application-default login
+gcloud config set project your-gcp-project-id
+```
+
+Then verify the full AI path with:
+
+```bash
+npm run smoke:ai
+```
+
+If that command returns JSON with `ok: true`, the project, credentials, model access, and SDK wiring are all working.
 
 ## Run
 
@@ -98,11 +113,11 @@ Generate a Twitch viewer achievement suggestion from a free-text prompt.
 {
   "prompt": "Create an achievement for viewers who send 100 messages in the channel.",
   "supportedTriggerLabels": [
-    "message",
-    "message_content",
-    "channel_point_cost",
-    "redeem_channel_point",
-    "api_caller"
+    "countMessage",
+    "contentMessage",
+    "countCostChannelPoint",
+    "countRedeemChannelPoint",
+    "apicaller"
   ]
 }
 ```
@@ -119,7 +134,7 @@ Generate a Twitch viewer achievement suggestion from a free-text prompt.
   "public": false,
   "active": true,
   "type": {
-    "label": "message",
+    "label": "countMessage",
     "data": null
   }
 }

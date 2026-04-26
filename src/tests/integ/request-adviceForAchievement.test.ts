@@ -155,8 +155,8 @@ describe("POST /achievements/suggestions", () => {
         port: 3000,
         nodeEnv: "test",
         gcpProjectId: "",
-        gcpLocation: "europe-west1",
-        geminiModel: "gemini-2.0-flash-lite",
+        gcpLocation: "global",
+        geminiModel: "gemini-2.5-flash",
         cors: { allowedOrigins: [] },
       },
     }));
