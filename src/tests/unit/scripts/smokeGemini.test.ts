@@ -44,6 +44,10 @@ describe("smokeGemini script", () => {
     errorSpy.mockRestore();
   });
 
+  afterAll(() => {
+    process.exitCode = undefined;
+  });
+
   it("logs success JSON when getAchievementAdvice resolves", async () => {
     mockGetAchievementAdvice.mockResolvedValueOnce(validResult);
 

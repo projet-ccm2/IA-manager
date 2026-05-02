@@ -9,9 +9,7 @@ interface Config {
   };
 }
 
-function resolveGeminiModel(rawModel: string | undefined): string {
-  const model = rawModel || "gemini-2.5-flash";
-
+function resolveGeminiModel(model: string = "gemini-2.5-flash"): string {
   if (
     model === "gemini-2.0-flash-001" ||
     model === "gemini-2.0-flash-lite-001" ||

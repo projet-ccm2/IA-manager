@@ -148,6 +148,44 @@ describe("POST /achievements/suggestions", () => {
     expect(response.body).toMatchObject({ error: "Service unavailable" });
   });
 
+  it("returns 503 when service throws a non-Error value", async () => {
+    mockGetAchievementAdvice.mockRejectedValue("raw string failure");
+
+    const response = await request(app)
+      .post("/achievements/suggestions")
+      .send({ prompt: "p" });
+
+    expect(response.status).toBe(503);
+    expect(response.body).toMatchObject({ error: "Service unavailable" });
+  });
+
+  it("returns 400 when supportedTriggerLabels is not an array", async () => {
+    const response = await request(app)
+      .post("/achievements/suggestions")
+      .send({ prompt: "p", supportedTriggerLabels: "countMessage" });
+
+    expect(response.status).toBe(400);
+    expect(response.body).toMatchObject({ error: "Validation error" });
+    expect(mockGetAchievementAdvice).not.toHaveBeenCalled();
+  });
+
+  it("returns 200 and passes supportedTriggerLabels when array is valid", async () => {
+    mockGetAchievementAdvice.mockResolvedValue(validSuggestion);
+
+    const response = await request(app)
+      .post("/achievements/suggestions")
+      .send({ prompt: "p", supportedTriggerLabels: ["countMessage"] });
+
+    expect(response.status).toBe(200);
+    expect(mockGetAchievementAdvice).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.any(String),
+      expect.any(String),
+      "p",
+      ["countMessage"],
+    );
+  });
+
   it("returns 503 when GCP_PROJECT_ID is not set", async () => {
     jest.resetModules();
     jest.doMock("../../config/environment", () => ({
