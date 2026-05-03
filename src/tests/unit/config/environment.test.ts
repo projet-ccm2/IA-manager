@@ -15,15 +15,17 @@ describe("Environment Configuration", () => {
       delete process.env.PORT;
       delete process.env.NODE_ENV;
       delete process.env.ALLOWED_ORIGINS;
-      delete process.env.GEMINI_API_KEY;
+      delete process.env.GCP_PROJECT_ID;
+      delete process.env.GCP_LOCATION;
       delete process.env.GEMINI_MODEL;
 
       const { config } = require("../../../config/environment");
 
       expect(config.port).toBe(3000);
       expect(config.nodeEnv).toBe("development");
-      expect(config.geminiApiKey).toBe("");
-      expect(config.geminiModel).toBe("gemini-2.0-flash");
+      expect(config.gcpProjectId).toBe("");
+      expect(config.gcpLocation).toBe("global");
+      expect(config.geminiModel).toBe("gemini-2.5-flash");
       expect(config.cors.allowedOrigins).toEqual([
         "http://localhost:3000",
         "http://localhost:8080",
@@ -35,15 +37,37 @@ describe("Environment Configuration", () => {
       process.env.PORT = "8080";
       process.env.NODE_ENV = "production";
       process.env.ALLOWED_ORIGINS = "https://example.com,https://test.com";
+      process.env.GEMINI_MODEL = "gemini-2.0-flash-lite";
 
       const { config } = require("../../../config/environment");
 
       expect(config.port).toBe(8080);
       expect(config.nodeEnv).toBe("production");
+      expect(config.geminiModel).toBe("gemini-2.5-flash");
       expect(config.cors.allowedOrigins).toEqual([
         "https://example.com",
         "https://test.com",
       ]);
+    });
+
+    it("should keep supported gemini models unchanged", () => {
+      process.env.GEMINI_MODEL = "gemini-2.5-flash-lite";
+
+      const { config } = require("../../../config/environment");
+
+      expect(config.geminiModel).toBe("gemini-2.5-flash-lite");
+    });
+
+    it("should read google cloud aliases for project and location", () => {
+      delete process.env.GCP_PROJECT_ID;
+      delete process.env.GCP_LOCATION;
+      process.env.GOOGLE_CLOUD_PROJECT = "google-project";
+      process.env.GOOGLE_CLOUD_LOCATION = "europe-west1";
+
+      const { config } = require("../../../config/environment");
+
+      expect(config.gcpProjectId).toBe("google-project");
+      expect(config.gcpLocation).toBe("europe-west1");
     });
 
     it("should parse port as integer", () => {
@@ -82,7 +106,8 @@ describe("Environment Configuration", () => {
 
       expect(config).toHaveProperty("port");
       expect(config).toHaveProperty("nodeEnv");
-      expect(config).toHaveProperty("geminiApiKey");
+      expect(config).toHaveProperty("gcpProjectId");
+      expect(config).toHaveProperty("gcpLocation");
       expect(config).toHaveProperty("geminiModel");
       expect(config).toHaveProperty("cors");
 
@@ -90,7 +115,8 @@ describe("Environment Configuration", () => {
 
       expect(typeof config.port).toBe("number");
       expect(typeof config.nodeEnv).toBe("string");
-      expect(typeof config.geminiApiKey).toBe("string");
+      expect(typeof config.gcpProjectId).toBe("string");
+      expect(typeof config.gcpLocation).toBe("string");
       expect(Array.isArray(config.cors.allowedOrigins)).toBe(true);
     });
   });

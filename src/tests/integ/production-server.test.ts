@@ -13,8 +13,9 @@ jest.mock("../../config/environment", () => ({
   config: {
     nodeEnv: "production",
     port: 3000,
-    geminiApiKey: "test-key",
-    geminiModel: "gemini-2.0-flash",
+    gcpProjectId: "test-project",
+    gcpLocation: "global",
+    geminiModel: "gemini-2.5-flash",
     cors: { allowedOrigins: [] },
   },
 }));
